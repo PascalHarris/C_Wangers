@@ -4,7 +4,7 @@ void show_save_dialogue (GtkWindow *parent_window, gpointer dialogue_parameters)
     GtkWidget *dialogue;
     GtkFileChooser *chooser;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
-    gint res;
+    gint response;
     
     char* existing_filepath = ((struct document*)dialogue_parameters)->filename;
     
@@ -23,8 +23,8 @@ void show_save_dialogue (GtkWindow *parent_window, gpointer dialogue_parameters)
         gtk_file_chooser_set_filename (chooser, existing_filepath);
     }
     
-    res = gtk_dialog_run (GTK_DIALOG (dialogue));
-    if (res == GTK_RESPONSE_ACCEPT) {
+    response = gtk_dialog_run (GTK_DIALOG (dialogue));
+    if (response == GTK_RESPONSE_ACCEPT) {
         char *filepath;
         filepath = gtk_file_chooser_get_filename (chooser);
         ((struct document*)dialogue_parameters)->filename = filepath;
@@ -40,7 +40,7 @@ void show_open_dialogue (GtkWindow *parent_window, gpointer dialogue_parameters)
     //    struct document *doc = dialogue_parameters;
     GtkWidget *dialogue;
     GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
-    gint res;
+    gint response;
     
     //char *filename; //placeholder
     //g_print("TEST %s\n", (*doc).filename);
@@ -50,8 +50,8 @@ void show_open_dialogue (GtkWindow *parent_window, gpointer dialogue_parameters)
                                             "Open", GTK_RESPONSE_ACCEPT,
                                             NULL);
     
-    res = gtk_dialog_run (GTK_DIALOG (dialogue));
-    if (res == GTK_RESPONSE_ACCEPT) {
+    response = gtk_dialog_run (GTK_DIALOG (dialogue));
+    if (response == GTK_RESPONSE_ACCEPT) {
         char *filepath;
         GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialogue);
         filepath = gtk_file_chooser_get_filename (chooser);

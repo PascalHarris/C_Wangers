@@ -10,6 +10,8 @@
 #include <gtk/gtk.h>
 #include "gtk_wangers.h"
 
+struct action_param; // forward declaration to suppress error.
+
 /**
  * create_menubar:
  *
@@ -32,6 +34,10 @@ GtkWidget* create_menubar();
  * Returns: GtkWidget
  */
 GtkWidget* create_menu(void* menubar, char* label);
+
+void add_shortcut_to_menuitem(GtkWidget* menu_item, GtkAccelGroup* shortcut_group, char shortcut);
+
+GtkWidget* create_menuitem_with_parameters_and_shortcut(void* parent_menu, char* label, struct action_param menuaction, GtkAccelGroup* shortcut_group, char shortcut);
 
 /**
  * create_menuitem_with_parameters:
@@ -67,4 +73,7 @@ GtkWidget* create_menuitem_with_parameters(void* parent_menu, char* label, struc
  * Returns: GtkWidget
  */
 GtkWidget* create_menuitem(void* parent_menu, char* label, void (*menu_action_ptr)(void*));
+
+GtkAccelGroup* create_shortcut_group(GtkWidget* window);
+
 #endif

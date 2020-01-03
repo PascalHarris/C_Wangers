@@ -66,4 +66,5 @@ int bytesNeeded(long long input_number);
  * Returns: bool
  */
 bool bool_from_string(char* input_string);
+
 #endif

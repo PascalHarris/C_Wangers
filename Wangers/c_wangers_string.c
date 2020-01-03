@@ -197,3 +197,16 @@ unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t
     *return_length = decoded_length;
     return return_string;
 }
+
+bool starts_with(char* input_string, char* check_string) {
+    bool matches = true;
+    int i = 0;
+    
+    if (strlen(check_string) > strlen(input_string)) { matches = false; }
+    while (matches && i < strlen(check_string)) {
+        if (input_string[i] != check_string[i]) { matches = false; }
+        i++;
+    }
+    
+    return matches;
+}

@@ -7,6 +7,7 @@
 #ifndef CSTRING_H_
 #define CSTRING_H_
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -176,5 +177,7 @@ void trim(char *input_string);
  * Returns: unsigned char*
  */
 unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t length, size_t *return_length, int replace_us_by_ws);
+
+bool starts_with(char* input_string, char* check_string);
 
 #endif
