@@ -19,7 +19,18 @@
 
 #define EPOCH_DIFF 0x019DB1DED53E8000LL /* 116444736000000000 nsecs */
 #define RATE_DIFF 10000000 /* 100 nsecs */
-typedef int64_t filetime_t;
+
+#define RFC2425 "%Y-%m-%dT%H:%M:%SZ"
+#define RFC2445 "%Y%m%dT%H%M%SZ"
+
+typedef int64_t windows_t;
+
+/** Described in https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.comtypes.filetime?view=netframework-4.8 */
+typedef struct {
+    uint32_t  dwLowDateTime;
+    uint32_t  dwHighDateTime;
+} FILETIME;
+#define MAX_DATE_FORMAT_LENGTH 40
 
 /**
  * is_leap_year:
@@ -72,17 +83,17 @@ unsigned long long timeunixtovms(time_t unixtime);
  *
  * Returns: filetime_t
  */
-filetime_t timeunixtowindows(time_t utime);
+windows_t timeunixtowindows(time_t utime);
 
 /**
  * timewindowstounix:
- * @ftime: (type filetime_t) The Windows time to be converted.
+ * @ftime: (type windows_t) The Windows time to be converted.
  *
  * Converts Windows filetime to Unix epoch
  *
  * Returns: time_t
  */
-time_t timewindowstounix(filetime_t ftime);
+time_t timewindowstounix(windows_t ftime);
 
 /**
  * debug_time:
@@ -115,4 +126,15 @@ char* string_from_time(time_t input_time, char* format_string);
  * Returns: time_t
  */
 time_t time_from_string(char* input_string, char* format_string);
+
+time_t filetime_to_unix(FILETIME *filetime);
+
+size_t filetime_to_string(FILETIME* filetime, char* format_string, char* result);
+
+void filetime_to_tm (FILETIME *filetime, struct tm *result);
+
+char* filetime_to_format(FILETIME* ft, int buflen, char* result, char* format);
+
+char* now_to_format(int buflen, char* result, char* format);
+
 #endif

@@ -59,12 +59,12 @@ unsigned long long timeunixtovms(time_t unixtime) {
     return timevalue;
 }
 
-filetime_t timeunixtowindows(time_t utime) {
+windows_t timeunixtowindows(time_t utime) {
     int64_t tconv = ((int64_t)utime * RATE_DIFF) + EPOCH_DIFF;
     return tconv;
 }
 
-time_t timewindowstounix(filetime_t ftime) {
+time_t timewindowstounix(windows_t ftime) {
     int64_t tconv = (ftime - EPOCH_DIFF) / RATE_DIFF;
     return (time_t)tconv;
 }
@@ -106,3 +106,39 @@ time_t time_from_string(char* input_string, char* format_string) {
     return t<1||t>5000000000?0:t;
 }
 
+time_t filetime_to_unix(FILETIME *filetime) {
+    uint64_t time = filetime->dwHighDateTime;
+    uint64_t bias = 11644473600LL;
+    time <<= 32;
+    time += filetime->dwLowDateTime;
+    time /= 10000000;
+    time -= bias;
+    return ((time > (uint64_t)0x000000007fffffff) && (sizeof(time_t) <= 4)) ? 0 : (time_t)time;
+}
+
+size_t filetime_to_string(FILETIME* filetime, char* format_string, char* result) {
+    time_t time;
+    time = filetime_to_unix(filetime);
+    return strftime(result, MAX_DATE_FORMAT_LENGTH - 1, format_string, localtime(&time));
+}
+
+void filetime_to_tm (FILETIME *filetime, struct tm *result) {
+    time_t time;
+    time = filetime_to_unix(filetime);
+    gmtime_r(&time, result);
+}
+
+char* filetime_to_format(FILETIME* ft, int buflen, char* result, char* format) {
+    struct tm stm;
+    filetime_to_tm(ft, &stm);
+    strftime(result, buflen, format, &stm);
+    return result;
+}
+
+char* now_to_format(int buflen, char* result, char* format) {
+    struct tm stm;
+    time_t t = time(NULL);
+    gmtime_r(&t, &stm);
+    strftime(result, buflen, format, &stm);
+    return result;
+}

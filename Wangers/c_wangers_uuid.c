@@ -1,7 +1,7 @@
 #include "c_wangers_uuid.h"
 
 char* uuid_generator(int length) { // 0 or values greater than 56 result in full length UUID
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     char* strUuid = (char*)calloc(57, sizeof(char));
     sprintf(strUuid, "%x%x-%x-%x-%x-%x%x%x",
             rand(), rand(),

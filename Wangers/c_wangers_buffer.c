@@ -1,4 +1,5 @@
 #include "c_wangers_buffer.h"
+#include "math.h"
 
 unsigned long ByteSwap64 (unsigned long LongNumber) {
     return (((LongNumber&0x00000000000000FFULL)<<56)+
@@ -78,7 +79,7 @@ unsigned char* buffer_from_hexstring(char* string, size_t* buffer_size) {
 }
 
 char* hexstring_from_buffer(unsigned char* buffer, size_t buffer_size) {
-    int buffer_sz = (buffer_size * 2) + 1;
+    size_t buffer_sz = (buffer_size * 2) + 1;
     char* HexString = (char *)calloc( buffer_sz, sizeof(char) );
 
     for (size_t count = 0; count < buffer_size; count++) {
@@ -100,9 +101,22 @@ void * swap_bytes(void *input_bytes, size_t length) {
     return input_bytes;
 }
 
+bool is_base64_encoded(char *input_string, size_t len) {
+    bool result = false;
+    uint8_t *b = (uint8_t *)input_string;
+    while (len--) {
+        if ((*b < 32) && (*b != 9) && (*b != 10)) {
+            result = true;
+            break;
+        }
+        b++;
+    }
+    return result;
+}
+
 char *base64_decode(char *s) {
     char *p = s, *e, *r, *_ret;
-    int len = strlen(s);
+    size_t len = strlen(s);
     unsigned char i, unit[4];
 
     e = s + len;
@@ -138,4 +152,42 @@ char *base64_decode(char *s) {
     *r = 0;
 
     return _ret;
+}
+
+char *base64_encode(unsigned char *data,
+                    size_t input_length,
+                    bool multiple_line) {
+
+//    size_t output_length = 4 * ((input_length + 2) / 3) + ceil((output_length)/B64_LINE_LENGTH) + 2;
+    size_t output_length = 4 * ((input_length + 2) / 3) + ceil((input_length)/B64_LINE_LENGTH) + 2;
+
+    char *encoded_data = calloc(output_length, sizeof(char));
+    
+    if (encoded_data == NULL) {
+        return NULL;
+    }
+
+    int j = 0;
+    for (int i = 0, line_length = 0; i < input_length;) {
+
+        uint32_t x = i < input_length ? (unsigned char)data[i++] : 0;
+        uint32_t y = i < input_length ? (unsigned char)data[i++] : 0;
+        uint32_t z = i < input_length ? (unsigned char)data[i++] : 0;
+
+        uint32_t triple = (x << 0x10) + (y << 0x08) + z;
+
+        encoded_data[j++] = B64[(triple >> 3 * 6) & 0x3F];
+        encoded_data[j++] = B64[(triple >> 2 * 6) & 0x3F];
+        encoded_data[j++] = B64[(triple >> 1 * 6) & 0x3F];
+        encoded_data[j++] = B64[(triple >> 0 * 6) & 0x3F];
+        
+        line_length += 4;
+        if (line_length % B64_LINE_LENGTH == 0 && multiple_line) {
+            encoded_data[j++] = '\n';
+        }
+    }
+
+    encoded_data[--j] = 0x3d;
+
+    return encoded_data;
 }

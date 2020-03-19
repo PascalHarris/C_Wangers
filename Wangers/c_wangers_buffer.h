@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
+#define B64_LINE_LENGTH 76
 static char B64[64] = {
         'A','B','C','D','E','F','G',
         'H','I','J','K','L','M','N',
@@ -121,6 +123,8 @@ char* hexstring_from_buffer(unsigned char* buffer, size_t buffer_size);
  */
 void * swap_bytes(void *input_bytes, size_t length);
 
+bool is_base64_encoded(char *input_string, size_t len);
+
 /**
  * base64_decode:
  * @s: (type char*) The B64 encoded string to be decoded
@@ -130,5 +134,7 @@ void * swap_bytes(void *input_bytes, size_t length);
  * Returns: char*
  */
 char *base64_decode(char *s);
+
+char *base64_encode(unsigned char *data, size_t input_length, bool multiple_line);
 
 #endif

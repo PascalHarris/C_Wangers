@@ -1,10 +1,10 @@
 #include "c_wangers_string.h"
 
-char* pad_left(int length, char pad, char* input_string) {
-    int minLength = length > strlen(input_string)?length:strlen(input_string);
+char* pad_left(size_t length, char pad, char* input_string) {
+    size_t minLength = length > strlen(input_string)?length:strlen(input_string);
 
     char* return_string = (char*)calloc(minLength, sizeof(char));
-    int padLen = length - strlen(input_string);
+    size_t padLen = length - strlen(input_string);
     padLen = padLen < 0 ? 0 : padLen;
 
     memset(return_string, 0, sizeof(char));
@@ -14,11 +14,11 @@ char* pad_left(int length, char pad, char* input_string) {
     return return_string;
 }
 
-char* pad_right(int length, char pad, char* input_string) {
-    int minLength = length > strlen(input_string)?length:strlen(input_string);
+char* pad_right(size_t length, char pad, char* input_string) {
+    size_t minLength = length > strlen(input_string)?length:strlen(input_string);
 
     char* return_string = (char*)calloc(minLength, sizeof(char));
-    int padLen = length - strlen(input_string);
+    size_t padLen = length - strlen(input_string);
     padLen = padLen < 0 ? 0 : padLen;
 
     memset(return_string, 0, sizeof(char));
@@ -121,7 +121,7 @@ char* delimited_substring(char* input_string, char opening_delimiter, char closi
 }
 
 void trim(char *input_string) {
-    int i, begin = 0, end = strlen(input_string) - 1;
+    size_t i, begin = 0, end = strlen(input_string) - 1;
     while (isspace((unsigned char) input_string[begin])) { begin++; }
     while ((end >= begin) && isspace((unsigned char) input_string[end])) { end--; }
     for (i = begin; i <= end; i++) { input_string[i - begin] = input_string[i]; }
@@ -131,7 +131,7 @@ void trim(char *input_string) {
 unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t length, size_t *return_length, int replace_us_by_ws) {
     register unsigned const char *input_locn;
     register unsigned char *output_locn;
-    register unsigned int i, high_nibble, low_nibble;
+    register size_t i, high_nibble, low_nibble;
 
     size_t decoded_length, buffer_size;
     unsigned char *return_string;
@@ -140,7 +140,7 @@ unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t
         replace_us_by_ws = '_';
     }
 
-    i = length, input_locn = input_string; buffer_size = length;
+    i = length; input_locn = input_string; buffer_size = length;
 
     while (i > 1 && *input_locn != '\0') {
         if (*input_locn == '=') {
@@ -158,7 +158,7 @@ unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t
 
     while (i > 0 && *input_locn != '\0') {
         if (*input_locn == '=') {
-            i--, input_locn++;
+            i--; input_locn++;
             if (i == 0 || *input_locn == '\0') {
                 break;
             }
@@ -169,8 +169,8 @@ unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t
                     free(return_string);
                     return NULL;
                 }
-                *(output_locn++) = (high_nibble << 4) | low_nibble, decoded_length++;
-                i--, input_locn++;
+                *(output_locn++) = (high_nibble << 4) | low_nibble; decoded_length++;
+                i--; input_locn++;
             } else if (high_nibble < 64) {
                 /* soft line break */
                 while (high_nibble == 32) {
@@ -180,16 +180,16 @@ unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t
                     }
                 }
                 if (input_locn[0] == '\r' && i >= 2 && input_locn[1] == '\n') {
-                    i--, input_locn++;
+                    i--; input_locn++;
                 }
-                i--, input_locn++;
+                i--; input_locn++;
             } else {
                 free(return_string);
                 return NULL;
             }
         } else {
             *(output_locn++) = (replace_us_by_ws == *input_locn ? '\x20': *input_locn);
-            i--, input_locn++, decoded_length++;
+            i--; input_locn++; decoded_length++;
         }
     }
 
@@ -209,4 +209,48 @@ bool starts_with(char* input_string, char* check_string) {
     }
     
     return matches;
+}
+
+/** compare strings case-insensitive.
+ *  @return  -1 if a < b, 0 if a==b, 1 if a > b
+ */
+int case_insensitive_compare(char *a, char *b) {
+    while(*a != '\0' && *b != '\0' && ((int)toupper(*a)==(int)toupper(*b))) {
+        a++; b++;
+    }
+    if (toupper(*a) == toupper(*b)) {
+        return 0;
+    } else if (toupper(*a) < toupper(*b)) {
+        return -1;
+    } else {
+        return 1;
+    }
+}
+
+// compare upto x chars in string a and b case-insensitively
+// returns -1 if a < b, 0 if a==b, 1 if a > b
+int case_insensitive_compare_up_to_n_characters(char *a, char *b, size_t character_count) {
+    size_t y = 0;
+    while (*a != '\0' && *b != '\0' && y < character_count && toupper(*a)==toupper(*b)) {
+        a++; b++; y++;
+    }
+    // if we have reached the end of either string, or a and b still match
+    if (*a == '\0' || *b == '\0' || toupper(*a)==toupper(*b)) {
+        return 0;
+    } else if (toupper(*a) < toupper(*b)) {
+        return -1;
+    } else {
+        return 1;
+    }
+}
+
+int count_occurences_of_char(char *input_string, char check_char) {
+    int count = 0;
+    while (*input_string) {
+        if (*input_string == check_char) {
+            count++;
+        }
+        input_string++;
+    }
+    return count;
 }

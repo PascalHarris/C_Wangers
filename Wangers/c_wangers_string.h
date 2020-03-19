@@ -44,7 +44,7 @@ static unsigned int hexval_tbl[256] = {
  *
  * Returns: char*
  */
-char* pad_left(int length, char pad, char* input_string);
+char* pad_left(size_t length, char pad, char* input_string);
 
 /**
  * pad_right:
@@ -60,7 +60,7 @@ char* pad_left(int length, char pad, char* input_string);
  *
  * Returns: char*
  */
-char* pad_right(int length, char pad, char* input_string);
+char* pad_right(size_t length, char pad, char* input_string);
 
 /**
  * pad_thai:
@@ -179,5 +179,16 @@ void trim(char *input_string);
 unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t length, size_t *return_length, int replace_us_by_ws);
 
 bool starts_with(char* input_string, char* check_string);
+
+/** compare strings case-insensitive.
+ *  @return  -1 if a < b, 0 if a==b, 1 if a > b
+ */
+int case_insensitive_compare(char *a, char *b);
+
+// compare upto x chars in string a and b case-insensitively
+// returns -1 if a < b, 0 if a==b, 1 if a > b
+int case_insensitive_compare_up_to_n_characters(char *a, char *b, size_t character_count);
+
+int count_occurences_of_char(char *input_string, char check_char);
 
 #endif
