@@ -101,7 +101,7 @@ void * swap_bytes(void *input_bytes, size_t length) {
     return input_bytes;
 }
 
-bool is_base64_encoded(char *input_string, size_t len) {
+bool requires_base64_encoding(char *input_string, size_t len) {
     bool result = false;
     uint8_t *b = (uint8_t *)input_string;
     while (len--) {

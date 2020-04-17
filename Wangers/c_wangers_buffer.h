@@ -123,7 +123,7 @@ char* hexstring_from_buffer(unsigned char* buffer, size_t buffer_size);
  */
 void * swap_bytes(void *input_bytes, size_t length);
 
-bool is_base64_encoded(char *input_string, size_t len);
+bool requires_base64_encoding(char *input_string, size_t len);
 
 /**
  * base64_decode:
