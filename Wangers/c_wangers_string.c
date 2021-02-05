@@ -61,7 +61,7 @@ char* remove_string_from_string(char* input_string, char* string_to_remove) {
     
     buffer = strtok(input_string, " \t\n");
     while(buffer) {
-        if(strcmp(buffer, string_to_remove) != 0) {
+        if (strcmp(buffer, string_to_remove) != 0) {
             strcat(return_string, buffer);
             strcat(return_string, " ");
         }
