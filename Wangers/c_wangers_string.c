@@ -62,8 +62,10 @@ char* remove_string_from_string(char* input_string, char* string_to_remove) {
     buffer = strtok(input_string, " \t\n");
     while(buffer) {
         if (strcmp(buffer, string_to_remove) != 0) {
-            strcat(return_string, buffer);
-            strcat(return_string, " ");
+//            strcat(return_string, buffer);
+//            strcat(return_string, " ");
+            strlcat(return_string, buffer, strlen(input_string)+1);
+            strlcat(return_string, " ", strlen(input_string)+1);
         }
         buffer = strtok(NULL, " \t\n");
     }
@@ -80,7 +82,8 @@ char* replace_occurences_in_string(char *input_string, const char *string_to_rep
     while (1) {
         const char *p = strstr(tmp, string_to_replace);
         if (p == NULL) {
-            strcpy(insert_point, tmp);
+//            strcpy(insert_point, tmp);
+            strlcpy(insert_point, tmp, strlen(insert_point));
             break;
         }
 
