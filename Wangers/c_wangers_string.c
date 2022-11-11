@@ -57,7 +57,7 @@ char* last_word_in_string(char* input_string) {
 }
 
 char* remove_string_from_string(char* input_string, char* string_to_remove) {
-    char *buffer, *return_string = malloc(strlen(input_string)+1);
+    char *buffer, *return_string = calloc(strlen(input_string)+1, sizeof(char));
     
     buffer = strtok(input_string, " \t\n");
     while(buffer) {
@@ -73,7 +73,7 @@ char* remove_string_from_string(char* input_string, char* string_to_remove) {
 }
 
 char* replace_occurences_in_string(char *input_string, const char *string_to_replace, const char *replacement_string) {
-    char* output_string = malloc(sizeof(char) * strlen(input_string));
+    char* output_string = calloc(strlen(input_string), sizeof(char));
     char *insert_point = &output_string[0];
     const char *tmp = input_string;
     size_t string_to_replace_len = strlen(string_to_replace);
@@ -103,7 +103,7 @@ char* replace_occurences_in_string(char *input_string, const char *string_to_rep
 
 char* delimited_substring(char* input_string, char opening_delimiter, char closing_delimiter) {
     int i = 0, j, char_position = 0;
-    char* output_string = malloc(sizeof(char)); // only need one character at the moment!
+    char* output_string = calloc(1, sizeof(char)); // only need one character at the moment!
     while (input_string[i] != '\0') {
         if (input_string[i] == opening_delimiter) {
             j = i + 1;
@@ -132,12 +132,12 @@ void trim(char *input_string) {
 }
 
 unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t length, size_t *return_length, int replace_us_by_ws) {
-    register unsigned const char *input_locn;
-    register unsigned char *output_locn;
+    register unsigned const char *input_locn = NULL;
+    register unsigned char *output_locn = NULL;
     register size_t i, high_nibble, low_nibble;
 
     size_t decoded_length, buffer_size;
-    unsigned char *return_string;
+    unsigned char *return_string = NULL;
 
     if (replace_us_by_ws) {
         replace_us_by_ws = '_';
@@ -155,7 +155,7 @@ unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t
         i--;
     }
 
-    return_string = (unsigned char*)malloc(buffer_size + 1);
+    return_string = (unsigned char*)calloc(buffer_size + 1, sizeof(unsigned char));
     i = length; input_locn = input_string; output_locn = return_string;
     decoded_length = 0;
 
@@ -203,7 +203,7 @@ unsigned char* quoted_printable_decode(const unsigned char *input_string, size_t
 
 bool starts_with(char* input_string, char* check_string) {
     bool matches = true;
-    int i = 0;
+    unsigned long i = 0;
     
     if (strlen(check_string) > strlen(input_string)) { matches = false; }
     while (matches && i < strlen(check_string)) {

@@ -121,7 +121,7 @@ char *base64_decode(char *s) {
 
     e = s + len;
     len = len / 4 * 3 + 1;
-    r = _ret = (char *) malloc(len);
+    r = _ret = (char *) calloc(len, sizeof(char));
 
     while (p < e) {
         memcpy(unit, p, 4);
@@ -168,7 +168,7 @@ char *base64_encode(unsigned char *data,
     }
 
     int j = 0;
-    for (int i = 0, line_length = 0; i < input_length;) {
+    for (unsigned long i = 0, line_length = 0; i < input_length;) {
 
         uint32_t x = i < input_length ? (unsigned char)data[i++] : 0;
         uint32_t y = i < input_length ? (unsigned char)data[i++] : 0;
