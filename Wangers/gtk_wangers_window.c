@@ -15,6 +15,13 @@ GtkWidget* create_window (int width, int height, char* title, bool will_destroy)
     return window;
 }
 
+/**
+ @brief Destroys a modal GTK dialogue.
+ @discussion Connected to the "response" signal of a `GtkDialog`. When triggered, it destroys the dialogue widget.
+ @param dialog The `GtkDialog` to be destroyed.
+ @param response_id The response identifier (unused).
+ @param user_data Optional user data (unused).
+ */
 void close_modal (GtkDialog *dialog, gint response_id, gpointer user_data) {
     gtk_widget_destroy (GTK_WIDGET (dialog));
 }

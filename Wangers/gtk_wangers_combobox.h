@@ -10,28 +10,19 @@
 #include <gtk/gtk.h>
 
 /**
- * liststore_with_string:
- * @num_args: (type int) the number of items in the list store.
- * @arg_list: (nullable) (type gchar*) a list of arguments, all of type gchar*.
- *
- * @num_args must not be %NULL.
- * @arg_list must contain 1 or more arguments.
- *
- * Sets up the liststore for the combo box.
- *
- * Returns: GtkListStore
+ @brief Creates a GtkListStore containing a variable number of string entries.
+ @discussion Initializes a single-column list store of type `G_TYPE_STRING` and populates it with the provided string arguments. Useful for populating combo boxes or list views with static string options.
+ @param num_args The number of string arguments to insert.
+ @param ... A variable list of `gchar*` strings to populate the list store.
+ @return A pointer to the newly created `GtkListStore` containing the provided strings.
  */
 GtkListStore* liststore_with_string(int num_args, ...);
 
 /**
- * new_combobox_cell:
- * @listmodel: (type GtkListStore) the list model for the combo-box.
- *
- * @listmodel must not be %NULL.
- *
- * Sets up a combobox cell containing the items in the supplied GtkListModel.
- *
- * Returns: GtkCellRenderer
+ @brief Creates a combo box cell renderer backed by a string list model.
+ @discussion Initializes a `GtkCellRendererCombo` with editable entry and dropdown behavior. The provided list model is used as the source of selectable items.
+ @param listmodel A `GtkListStore` containing string entries for the combo box.
+ @return A pointer to a configured `GtkCellRenderer` suitable for use in tree views or combo box columns.
  */
 GtkCellRenderer* new_combobox_cell(GtkListStore* listmodel);
 #endif

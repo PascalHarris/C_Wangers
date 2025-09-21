@@ -20,43 +20,35 @@
 #define CREATE_SUCCESS 0
 
 /**
- * expand_path:
- * @path: (type char*) The name of the path to be expanded.
- *
- * Expands the path to its full filesystem path.
- *
- * Returns: char* expanded path
+ @brief Expands a shell-style path to its absolute form.
+ @discussion Uses `wordexp` to resolve shell variables and tilde notation in the input path. The result is copied into a static buffer and returned. If the expanded path exceeds `LOCALPATHLENGTH`, the result is truncated.
+ @param path A shell-style path string (e.g., "~/Documents").
+ @return A pointer to a static buffer containing the expanded path.
  */
 char* expand_path(char* path);
 
 /**
- * make_directory:
- * @path: (type char*) The name of the path to be created.
- * @mode: (type mode_t) The file attributes for the path to be created
- *
- * Creates a directory path.
- *
- * Returns: signed int - ALREADY_EXISTS if path exists, CREATE_FAILED if create failed, CREATE_SUCCESS if successful
+ @brief Creates a directory at the specified path with the given mode.
+ @discussion Attempts to create a directory using `mkdir`. If the directory already exists, returns `ALREADY_EXISTS`. On other errors, prints a message and returns `CREATE_FAILED`. On success, returns `CREATE_SUCCESS`.
+ @param path The directory path to create.
+ @param mode The permission mode (e.g., `0755`) for the new directory.
+ @return A status code: `CREATE_SUCCESS`, `ALREADY_EXISTS`, or `CREATE_FAILED`.
  */
 signed make_directory(char* path, mode_t mode);
 
 /**
- * file_exists:
- * @filename: (type char*) The name of the file to be verified.
- *
- * Checks to see if a file exists.
- *
- * Returns: bool
+ @brief Checks whether a file exists at the given path.
+ @discussion Uses `stat` to determine if the file or directory exists. Returns true if the file is found, false otherwise.
+ @param filename The path to the file or directory.
+ @return `true` if the file exists, `false` otherwise.
  */
 bool file_exists (char* filename);
 
 /**
- * line_count:
- * @filename: (type char*) The name of the file to be processed.
- *
- * Provides a count of the number of lines in a file.
- *
- * Returns: int
+ @brief Counts the number of lines in a text file.
+ @discussion Opens the file and reads character-by-character, incrementing a counter for each newline. Adds one final line if the file is non-empty. Returns zero if the file cannot be opened.
+ @param filename The path to the text file.
+ @return The number of lines in the file, or zero if the file could not be opened.
  */
 int line_count(char *filename);
 #endif

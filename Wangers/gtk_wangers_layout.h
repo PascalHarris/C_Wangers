@@ -12,34 +12,22 @@
 // May want to define a rect struct containing the size / position parameters
 
 /**
- * create_container_with_rect:
- * @object: (type void*) The object to be put inside a view.
- * @x: (type int) The x location of the object.
- * @y: (type int) The y location of the object.
- * @width: (type int) The width of the object.
- * @height: (type int) The height of the object.
- *
- * @object must not be %NULL.
- * @x must not be %NULL.
- * @y must not be %NULL.
- * @width must not be %NULL.
- * @height must not be %NULL.
- *
- * Creates a new view using the supplied object at the supplied size.
- *
- * Returns: GtkWidget
+ @brief Creates a fixed-position container with a child widget placed at specified coordinates.
+ @discussion Initializes a `GtkFixed` container and places the given widget at `(x, y)` with a fixed size. Useful for pixel-perfect layout scenarios or legacy UI designs where absolute positioning is required.
+ @param object A pointer to the widget to be placed inside the container.
+ @param x The horizontal position of the widget within the container.
+ @param y The vertical position of the widget within the container.
+ @param width The requested width of the widget.
+ @param height The requested height of the widget.
+ @return A `GtkWidget*` representing the container with the positioned child.
  */
 GtkWidget* create_container_with_rect (void* object, int x, int y, int width, int height);
 
 /**
- * create_scrollview_with_object:
- * @object: (type void*) The object to be put inside a scroll view.
- *
- * @object must not be %NULL.
- *
- * Creates a new scrollview using the supplied object.
- *
- * Returns: GtkWidget
+ @brief Wraps a widget in a scrollable container.
+ @discussion Creates a `GtkScrolledWindow` and adds the given widget as its child. Enables horizontal and vertical expansion to fill available space. Suitable for embedding large or dynamic content in scrollable views.
+ @param object A pointer to the widget to be placed inside the scroll view.
+ @return A `GtkWidget*` representing the scrollable container.
  */
 GtkWidget* create_scrollview_with_object (void* object);
 #endif

@@ -18,15 +18,11 @@ typedef struct action_param {
 } action_param;
 
 /**
- * set_action_with_parameter:
- * @action_ptr: (type void*) a pointer to the function for the action.
- * @action_parameter: (nullable) (type void*) pointer to the function parameter.
- *
- * @action_ptr must not be %NULL.
- *
- * Sets up the struct containing the function pointer and its parameters.
- *
- * Returns: struct action_param
+ @brief Constructs an `action_param` structure from a function pointer and its parameter.
+ @discussion Initializes an `action_param` with the provided function pointer and associated parameter. This is useful for deferred execution or callback registration where both the action and its context need to be stored together.
+ @param action_ptr A pointer to the function to be executed.
+ @param action_parameter A `gpointer` representing the parameter to be passed to the function.
+ @return An `action_param` structure containing the function and its parameter.
  */
 action_param set_action_with_parameter(void (*action_ptr), gpointer action_parameter);
 

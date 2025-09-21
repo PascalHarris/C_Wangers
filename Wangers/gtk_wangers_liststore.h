@@ -12,14 +12,9 @@
 #include <stdlib.h>
 
 /**
- * traverse_list_store:
- * @liststore: (type GtkListStore) a pointer to the treeview which will be saved.
- *
- * @liststore must not be %NULL.
- *
- * Iterates through the entire treeview.  Not fully implemented yet.
- *
- * Returns: void
+ @brief Iterates through all rows in a `GtkListStore`.
+ @discussion Traverses the list store from the first row to the end using a `GtkTreeIter`. Intended for performing operations on each row, such as reading or modifying cell values. Assumes column 0 is of type `G_TYPE_STRING`. No action is performed unless the commented line is activated.
+ @param liststore A pointer to the `GtkListStore` to be traversed.
  */
 void traverse_list_store (GtkListStore *liststore);
 

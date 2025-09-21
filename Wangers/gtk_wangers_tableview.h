@@ -23,222 +23,146 @@ typedef struct model_definition {
 bool (*validator_ptr)(GtkCellRendererText *, const gchar *, char**, gpointer);
 
 /**
- * save_table_to_text_file:
- * @treeview: (type GtkWidget*) a pointer to the treeview which will be saved.
- * @filename: (type gchar*) the name of the file which will be created.
- * @number_of_columns: (type int) the number of columns that the table has.
- *
- * @treeview must not be %NULL.
- * @filename must not be %NULL.
- *
- * Dumps the contents of a treeview table to disk.
- *
- * Returns: void
+ @brief Saves the contents of a `GtkTreeView` to a text file.
+ @discussion Iterates through each row and column of the tree view model, serializing cell contents as comma-separated values. Appends a newline after each row and writes the result to the specified file.
+ @param treeview A pointer to the `GtkTreeView` whose contents will be saved.
+ @param filename The path to the output text file.
+ @param number_of_columns The number of columns to serialize per row.
  */
 void save_table_to_text_file(GtkWidget *treeview, gchar* filename, int number_of_columns);
 
 /**
- * on_treeview_row_activated:
- * @view: (type GtkTreeView) a pointer to the treeview which will be saved.
- * @path: (type GtkTreePath) a pointer to the path of the activated row.
- * @col: (nullable) (type GtkTreeViewColumn) a pointer to the column that the activated cell is in.
- * @userdata: (nullable) (type gpointer) a pointer to userdata. Not used at present.
- *
- * @view must not be %NULL.
- * @path must not be %NULL.
- *
- * Performs an action when a cell is activated (clicked on).  Not fully implemented yet.
- *
- * Returns: void
+ @brief Handles double-click activation on a tree view row.
+ @discussion Retrieves the value from the first column of the activated row and prints it to stdout. Useful for debugging or triggering row-specific actions.
+ @param view The `GtkTreeView` that received the activation.
+ @param path The path of the activated row.
+ @param col The column that was activated.
+ @param userdata Optional user data passed to the signal handler.
  */
 void on_treeview_row_activated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata);
 
 /**
- * insert_list_row:
- * @widget: (nullable) (type GtkWidget) a pointer to the new list row that will be inserted.
- * @treeview: (type GtkWidget) a pointer to the list view which will be modified.
- *
- * @treeview must not be %NULL.
- *
- * Inserts a new row into the list before the row that the currently selected row is in.
- *
- * Returns: void
+ @brief Inserts a new row into a `GtkListStore` at the selected index.
+ @discussion Uses the selected row index to insert a new row with default values. Assumes the model is a list store.
+ @param widget The triggering widget (unused).
+ @param treeview The `GtkTreeView` whose model will be modified.
  */
 void insert_list_row (GtkWidget *widget, GtkWidget *treeview);
 
 /**
- * insert_tree_row:
- * @widget: (nullable) (type GtkWidget) a pointer to the new tree row that will be inserted.
- * @treeview: (type GtkWidget) a pointer to the treeview which will be modified.
- *
- * @treeview must not be %NULL.
- *
- * Inserts a new row into the tree before the row that the currently selected row is in.
- *
- * Returns: void
+ @brief Inserts a new row into a `GtkTreeStore` relative to the selected node.
+ @discussion Inserts a new row either as a sibling or child depending on the parent context. Handles parent-child relationships and validates iterators.
+ @param widget The triggering widget (unused).
+ @param treeview The `GtkTreeView` whose model will be modified.
  */
 void insert_tree_row (GtkWidget *widget, GtkWidget *treeview);
 
 /**
- * create_child_for_parent:
- * @widget: (nullable) (type GtkWidget) a pointer to the new tree row that will be created.
- * @treeview: (type GtkWidget) a pointer to the treeview which will be modified.
- *
- * @treeview must not be %NULL.
- *
- * Creates a child row for the currently selected parent into the tree.
- *
- * Returns: void
+ @brief Creates a child row under the selected parent node in a `GtkTreeStore`.
+ @discussion Inserts a new child row at the selected index under the current node. Assumes the model is a tree store.
+ @param widget The triggering widget (unused).
+ @param treeview The `GtkTreeView` whose model will be modified.
  */
 void create_child_for_parent (GtkWidget *widget, GtkWidget *treeview);
 
 /**
- * add_list_row:
- * @widget: (nullable) (type GtkWidget) a pointer to the new list row that will be added.
- * @treeview: (type GtkWidget) a pointer to the treeview which will be modified.
- *
- * @treeview must not be %NULL.
- *
- * Adds a new row into the list add the end of the treeview.
- *
- * Returns: void
+ @brief Appends a new row to the end of a `GtkListStore`.
+ @discussion Inserts a new row with default values at the end of the list model.
+ @param widget The triggering widget (unused).
+ @param treeview The `GtkTreeView` whose model will be modified.
  */
 void add_list_row (GtkWidget *widget, GtkWidget *treeview);
 
 /**
- * add_tree_row:
- * @widget: (nullable) (type GtkWidget) a pointer to the new tree row that will be added.
- * @treeview: (type GtkWidget) a pointer to the treeview which will be modified.
- *
- * @treeview must not be %NULL.
- *
- * Adds a new row into the list add the end of the treeview.
- *
- * Returns: void
+ @brief Appends a new row to the root of a `GtkTreeStore`.
+ @discussion Inserts a new row with default values at the top level of the tree model.
+ @param widget The triggering widget (unused).
+ @param treeview The `GtkTreeView` whose model will be modified.
  */
 void add_tree_row (GtkWidget *widget, GtkWidget *treeview);
 
 /**
- * list_cell_edited:
- * @cell: (type GtkCellRendererText) the cell that has been updated - from this we can get the column number.
- * @path_string: (type const gchar) the path to the row in the tableview that will need to be updated.
- * @new_text: (type const gchar) the new text that the cell will be populated with.
- * @data: (nullable) (type gpointer) the data model of type GtkTreeModel
- *
- * @cell must not be %NULL.
- *
- * Updates the edited cell, validating it if a validator has been configured.
- * @see: set_table_with_validator
- * @see: tree_cell_edited
- * @see: editing_started
- *
- * Returns: void
+ @brief Handles cell edits in a `GtkListStore`.
+ @discussion Updates the specified column of the edited row with the new text. Uses cell metadata to determine the target column.
+ @param cell The cell renderer that was edited.
+ @param path_string The string path of the edited row.
+ @param new_text The new text to set in the cell.
+ @param data A pointer to the model (`GtkTreeModel*`).
  */
 void list_cell_edited (GtkCellRendererText *cell, const gchar *path_string, const gchar *new_text, gpointer data);
 
 /**
- * tree_cell_edited:
- * @cell: (type GtkCellRendererText) the cell that has been updated - from this we can get the column number.
- * @path_string: (type const gchar) the path to the row in the tableview that will need to be updated.
- * @new_text: (type const gchar) the new text that the cell will be populated with.
- * @data: (nullable) (type gpointer) the data model of type GtkTreeModel
- *
- * @cell must not be %NULL.
- *
- * Updates the edited cell, validating it if a validator has been configured.
- * @see: set_table_with_validator
- * @see: list_cell_edited
- * @see: editing_started
- *
- * Returns: void
+ @brief Handles cell edits in a `GtkTreeStore`, with optional validation.
+ @discussion Allocates a modifiable buffer for the new text, validates it if a validator is set, and updates the cell. Frees the buffer after use.
+ @param cell The cell renderer that was edited.
+ @param path_string The string path of the edited row.
+ @param new_text The new text to set in the cell.
+ @param data A pointer to the model (`GtkTreeModel*`).
  */
 void tree_cell_edited (GtkCellRendererText *cell, const gchar *path_string, const gchar *new_text, gpointer data);
 
 /**
- * editing_started:
- * @cell: (type GtkCellRendererText) the cell that is being updated - from this we can get the column number.
- * @editable: (type const GtkCellEditable) whether or not the cell is editable.
- * @path: (type const gchar) the path to the row in the tableview that is being edited.
- * @data: (nullable) (type gpointer) the data model of type GtkTreeModel
- *
- * @cell must not be %NULL.
- *
- * Callback when edits start in the cell. Not implemented yet.
- * @see: list_cell_edited
- * @see: tree_cell_edited
- *
- * Returns: void
+ @brief Placeholder for cell editing start event.
+ @discussion Currently unused. Can be extended to handle pre-edit logic or styling.
+ @param cell The cell renderer being edited.
+ @param editable The editable widget.
+ @param path The path of the cell.
+ @param data Optional user data.
  */
 void editing_started (GtkCellRenderer *cell, GtkCellEditable *editable, const gchar *path, gpointer data);
 
+/**
+ @brief Retrieves the parent iterator of a given tree node.
+ @discussion Computes the parent path of the given child iterator and returns the corresponding iterator. Sets a flag indicating whether a parent exists.
+ @param model The tree model.
+ @param child_iter The iterator of the child node.
+ @param has_parent A pointer to a boolean that will be set to true if a parent exists.
+ @return The parent iterator if valid; otherwise, undefined.
+ */
 GtkTreeIter get_parent_iter(GtkTreeModel* model, GtkTreeIter child_iter, bool* has_parent);
 
 /**
- * get_selected_tree_node:
- * @treeview: (type GtkWidget) the tree view containing the cell for which the iter is required.
- *
- * @treeview must not be %NULL.
- *
- * Returns the iter for the row that contains the selected cell.
- *
- * Returns: GtkTreeIter
+ @brief Retrieves the currently selected node in a tree view.
+ @discussion Returns the iterator of the selected row in the tree view. Assumes single selection mode.
+ @param treeview The `GtkTreeView` to query.
+ @return The selected `GtkTreeIter`.
  */
 GtkTreeIter get_selected_tree_node(GtkWidget *treeview);
 
 /**
- * get_selected_row_index:
- * @treeview: (type GtkWidget) the tree view containing the cell for which the index is required.
- * @istree: (type bool) whether the row is in a tree (otherwise it's in a list)
- *
- * @treeview must not be %NULL.
- *
- * Returns the index for the row that contains the selected cell.
- *
- * Returns: int
+ @brief Gets the index of the selected row in a tree or list view.
+ @discussion Converts the selected iterator to a path and extracts the row index. Returns -1 if selection is invalid.
+ @param treeview The `GtkTreeView` to query.
+ @param istree `true` if the model is a `GtkTreeStore`, `false` for `GtkListStore`.
+ @return The row index, or -1 if no valid selection.
  */
 int get_selected_row_index(GtkWidget *treeview, bool istree);
 
 /**
- * delete_list_row:
- * @widget: (nullable) (type GtkWidget) the tree view containing the cell for which the index is required.
- * @treeview: (type GtkWidget) the list view containing the cell for which the index is required.
- *
- * @treeview must not be %NULL.
- *
- * Deletes the row from the list that contains the selected cell.
- *
- * Returns: void
+ @brief Deletes the selected row from a `GtkListStore`.
+ @discussion Removes the selected row if the iterator is valid.
+ @param widget The triggering widget (unused).
+ @param treeview The `GtkTreeView` whose model will be modified.
  */
 void delete_list_row (GtkWidget *widget, GtkWidget *treeview);
 
 /**
- * delete_tree_row:
- * @widget: (nullable) (type GtkWidget) the tree view containing the cell for which the index is required.
- * @treeview: (type GtkWidget) the tree view containing the cell for which the index is required.
- *
- * @treeview must not be %NULL.
- *
- * Deletes the row from the tree that contains the selected cell.
- *
- * Returns: void
+ @brief Deletes the selected node from a `GtkTreeStore`.
+ @discussion Removes the selected node if the iterator is valid.
+ @param widget The triggering widget (unused).
+ @param treeview The `GtkTreeView` whose model will be modified.
  */
 void delete_tree_row (GtkWidget *widget, GtkWidget *treeview);
 
 /**
- * cell_selection_function:
- * @selection: (nullable) (type GtkWidget) the tree view containing the cell which will be selected.
- * @model: (type GtkWidget) the data ,odel for the tree view.
- * @path: (type GtkTreePath) the path to the row in the tableview that is being selected.
- * @path_currently_selected: (type gboolean) Whether the cell is already  selected.
- * @userdata: (nullable) (type gpointer) .
- *
- * @selection must not be %NULL.
- * @model must not be %NULL.
- * @path must not be %NULL.
- *
- * Function called when cell is selected or loses selection. Not implemented yet.
- *
- * Returns: void
+ @brief Selection filter function for tree view rows.
+ @discussion Allows all selection changes. Can be extended to conditionally allow or block selection.
+ @param selection The tree selection object.
+ @param model The tree model.
+ @param path The path of the row being selected or unselected.
+ @param path_currently_selected Whether the row is currently selected.
+ @param userdata Optional user data.
+ @return `TRUE` to allow the selection change.
  */
 gboolean cell_selection_function (GtkTreeSelection *selection,
                               GtkTreeModel *model,
@@ -247,64 +171,42 @@ gboolean cell_selection_function (GtkTreeSelection *selection,
                               gpointer userdata);
 
 /**
- * create_tableview_with_model:
- * @model: (type void) a pointer to the data model for the table view.
- *
- * @model must not be %NULL.
- *
- * Creates a tableview using the supplied model.
- *
- * Returns: GtkWidget
+ @brief Creates a tree view widget with a model and selection filter.
+ @discussion Initializes a `GtkTreeView` with the given model and sets a custom selection function. Unrefs the model after binding.
+ @param model A pointer to the tree model (`GtkTreeModel*`).
+ @return A pointer to the newly created `GtkTreeView`.
  */
 GtkWidget* create_tableview_with_model (void* model);
 
 /**
- * add_column_to_table:
- * @editable: (type bool) whether the table view column is editable or not.
- * @tree_store: (type bool) whether the table view column is a tree store not. The alternative is a list store
- * @model_def: (type struct model_definition) a structure containing the table view and validator. The validator may be null.
- * @title: (type const gchar) the title for the column.
- * @cell: (type GtkCellRenderer) the cell that the column will contain.
- * @column_num: (type guint) number of the column being set up.
- *
- * @cell must not be %NULL.
- *
- * Adds a column to the table provided in #tree_store.
- * @see: add_columns_to_table
- * @see: set_table_with_validator
- *
- * Returns: void
+ @brief Adds a column to a tree or list view with editable cells and attributes.
+ @discussion Configures a `GtkTreeViewColumn` with a cell renderer, title, and attribute bindings. Connects edit signals and applies validator if present.
+ @param editable Whether the cell should be editable.
+ @param tree_store `true` if the model is a `GtkTreeStore`, `false` for `GtkListStore`.
+ @param model_def A `model_definition` struct containing the table view and validator.
+ @param title The column title.
+ @param cell The cell renderer to use.
+ @param column_num The model column index.
+ @param ... Attribute bindings in pairs: attribute name (`gchar*`), column index (`gint`), ending with `NULL`.
  */
 void add_column_to_table (bool editable, bool tree_store, struct model_definition model_def, const gchar *title, GtkCellRenderer *cell, guint column_num, ...);
 
 /**
- * add_column_to_table:
- * @editable: (type bool) whether the table view column is editable or not.
- * @tree_store: (type bool) whether the table view column is a tree store not. The alternative is a list store
- * @model_def: (type struct model_definition) a structure containing the table view and validator. The validator may be null.
- *
- * @model must not be %NULL.
- *
- * Adds multiple columns to the table provided in #tree_store using the parameters supplied in the arg_list
- * @see: add_column_to_table
- * @see: set_table_with_validator
- *
- * Returns: void
+ @brief Adds multiple text columns to a tree or list view.
+ @discussion Iterates through a variable argument list of title/index pairs and adds each column using `add_column_to_table`. Each column uses a new editable text renderer and binds the "text" attribute to the specified model column. Assumes the model is either a `GtkTreeStore` or `GtkListStore`.
+ @param editable Whether the cells should be editable.
+ @param tree_store `true` if the model is a `GtkTreeStore`, `false` for `GtkListStore`.
+ @param model_def A `model_definition` struct containing the table view and optional validator.
+ @param ... A variable list of title/index pairs: column title (`gchar*`), column index (`gint`), ending with `NULL`.
  */
 void add_columns_to_table (bool editable, bool tree_store, struct model_definition model_def, ...);
 
 /**
- * set_table_with_validator:
- * @validator_ptr: (nullable) (type void) function pointer to the validator.
- * @tableview: (type gpointer) the tableview for which the columns will be set up.
- *
- * @tableview must not be %NULL.
- *
- * Sets the table and adds a validator, if required.  Use in conjunction with add_columns_to_table and add_column_to_table
- * @see: add_column_to_table
- * @see: add_columns_to_table
- *
- * Returns: struct model_definition
+ @brief Constructs a `model_definition` with validator and table view.
+ @discussion Initializes a `model_definition` struct to associate a validator function with a specific table view. Used to enforce cell-level validation during editing.
+ @param validator_ptr A pointer to a validation function accepting cell context and modifiable text.
+ @param tableview A pointer to the `GtkTreeView` to be associated with the validator.
+ @return A fully initialized `model_definition` struct.
  */
 model_definition set_table_with_validator(void (*validator_ptr), gpointer tableview);
 

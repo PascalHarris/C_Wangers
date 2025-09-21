@@ -12,34 +12,18 @@
 #define EMPTY_DOCUMENT "Untitled"
 
 /**
- * show_save_dialogue:
- * @parent_window: (type GtkWindow*) The window that the document is contained in.
- * @dialogue_parameters: (type void*) a pointer to a struct of type document containing the document definition.
- *
- * @parent_window must not be %NULL.
- * @dialogue_parameters must not be %NULL.
- *
- * Shows the save dialogue.
- *
- * @see build_document_with_characteristics in gtk_wangers_document
- *
- * Returns: void
+ @brief Displays a GTK file chooser dialogue for saving a document.
+ @discussion Opens a modal save dialogue attached to the parent window. If the document has no filename (`EMPTY_DOCUMENT`), sets a default name. Otherwise, preselects the existing filename. On confirmation, updates the document's filename, sets the window title, and invokes the save action callback.
+ @param parent_window A pointer to the `GtkWindow` that owns the dialogue.
+ @param dialogue_parameters A pointer to a `struct document` containing the window, filename, file data, and save action pointer.
  */
 void show_save_dialogue (GtkWindow *parent_window, gpointer dialogue_parameters);
 
 /**
- * show_open_dialogue:
- * @parent_window: (type GtkWindow*) The window that the document is contained in.
- * @dialogue_parameters: (type void*) a pointer to a struct of type document containing the document definition.
- *
- * @parent_window must not be %NULL.
- * @dialogue_parameters must not be %NULL.
- *
- * Shows the open dialogue.
- *
- * @see build_document_with_characteristics in gtk_wangers_document
- *
- * Returns: void
+ @brief Displays a GTK file chooser dialogue for opening a document.
+ @discussion Opens a modal open dialogue attached to the parent window. On confirmation, updates the document's filename, sets the window title, and invokes the open action callback.
+ @param parent_window A pointer to the `GtkWindow` that owns the dialogue.
+ @param dialogue_parameters A pointer to a `struct document` containing the window, filename, file data, and open action pointer.
  */
 void show_open_dialogue (GtkWindow *parent_window, gpointer dialogue_parameters);
 #endif

@@ -22,50 +22,39 @@ typedef struct about_box_definition {
 } about_box_definition;
 
 /**
- * destroy:
- * @widget: (type GtkWidget*) The window that will be closed. Not used.
- * @data: (nullable) (type gpointer) Not used.
- *
- * Destroys the application. Use only if the application should quit when the window is closed
- *
- * Returns: void
+ @brief Terminates the GTK main loop.
+ @discussion Connected to the "destroy" signal of a top-level window. When triggered, it exits the GTK application.
+ @param widget The widget that emitted the signal.
+ @param data Optional user data (unused).
  */
 void destroy (GtkWidget *widget, gpointer data);
 
 /**
- * create_window:
- * @width: (type int) The initial width for the window.
- * @height: (type int) The initial height for the window.
- * @title: (type char*) The title to be used for the window.
- * @will_destroy: (type bool) Whether or not the application should quit when the window is closed.
- *
- * Creates a new window of the specified width and height
- *
- * Returns: GtkWidget
+ @brief Creates a top-level GTK window with optional destroy behavior.
+ @discussion Initializes a `GtkWindow` with the specified dimensions and title. If `will_destroy` is true, connects the "destroy" signal to terminate the GTK main loop.
+ @param width The default width of the window.
+ @param height The default height of the window.
+ @param title The title to display in the window's title bar.
+ @param will_destroy Whether to connect the window's "destroy" signal to `gtk_main_quit`.
+ @return A pointer to the newly created `GtkWidget` representing the window.
  */
 GtkWidget* create_window (int width, int height, char* title, bool will_destroy);
 
 /**
- * show_dialogue:
- * @button: (type GtkButton) The button pressed to show the dialogue.  Not used.
- * @user_data: (type void*) Pointer to struct of type about_box_definition which will define the contents of the dialogue.
- *
- * Displays a dialogue showing the contents of the provided struct.
- *
- * Returns: void
+ @brief Displays a modal "About" dialogue with a message.
+ @discussion Creates a `GtkDialog` with a title and message from an `about_box_definition` struct. Adds a centered label and an "Okay" button. Destroys the dialogue on response.
+ @param button The button that triggered the dialogue (unused).
+ @param user_data A pointer to an `about_box_definition` containing title, message, and parent window.
  */
 void show_dialogue (GtkButton *button, gpointer user_data);
 
 /**
- * about_box_definition:
- * @title: (type char*) The title for the about box.
- * @about_message: (type char*) The message to be displayed.
- * @window: (type GtkWindow*) The window that the about box will be modal for.
- *
- * Sets up the about box contents.
- * This will be renamed at some point to be more generic - it's not just for building about boxes!
- *
- * Returns: void
+ @brief Constructs an `about_box_definition` for use in modal dialogues.
+ @discussion Initializes a struct with title, message, and parent window for use in `show_dialogue`.
+ @param title The title of the dialogue window.
+ @param about_message The message to display in the dialogue.
+ @param window A pointer to the parent `GtkWindow`.
+ @return A fully initialized `about_box_definition` struct.
  */
 about_box_definition define_about_box(char* title, char* about_message, GtkWindow* window);
 #endif

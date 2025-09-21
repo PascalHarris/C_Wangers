@@ -21,22 +21,14 @@ typedef struct document {
 } document;
 
 /**
- * build_document_with_characteristics:
- * @parent_window: (type GtkWindow*) The window that the document is contained in.
- * @save_action_ptr: (type void*) function pointer to the function that should be executed when saving the file.
- * @open_action_ptr: (type void*) function pointer to the function that should be executed when opening the file.
- * @filename: (type gchar*) the filename for the document.
- * @filedata: (type void*) the file data content of the document.
- *
- * @parent_window must not be %NULL.
- * @save_action_ptr must not be %NULL.
- * @open_action_ptr must not be %NULL.
- * @filename must not be %NULL.
- * @filedata must not be %NULL.
- *
- * Sets up the struct containing the document data, filename, window and related functions.
- *
- * Returns: struct document
+ @brief Constructs a `document` structure with associated window and action pointers.
+ @discussion Initializes a `document` instance with its parent window, save/open function pointers, and associated filename and file data. This is useful for encapsulating document-related state and behavior in GTK applications.
+ @param parent_window A pointer to the `GtkWindow` that owns or displays the document.
+ @param save_action_ptr A function pointer for the document's save action.
+ @param open_action_ptr A function pointer for the document's open action.
+ @param filename A `gpointer` representing the document's filename (typically a `gchar*`).
+ @param filedata A `gpointer` representing the document's content or metadata.
+ @return A fully initialized `document` structure.
  */
 document build_document_with_characteristics(GtkWindow *parent_window,
                                              void (*save_action_ptr),
