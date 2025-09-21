@@ -26,6 +26,25 @@
 extern "C" {
 #endif
 
+/**
+ @brief Parses a date/time string into a `struct tm` using C++ streams.
+ @discussion
+ This function mimics the behavior of the POSIX `strptime`, using `std::istringstream` and `std::get_time`:
+ - Applies the current locale via `setlocale(LC_ALL, nullptr)`
+ - Parses the input string `buf` using the format string `fmt`
+ - Populates the `tm` structure with parsed values
+ - Returns a pointer to the next unread character in `buf`, or `nullptr` on failure
+
+ ⚠️ Notes:
+ - Locale-sensitive: parsing depends on the current C locale
+ - `tellg()` returns the stream position after parsing, used to compute the return pointer
+ - Marked `extern "C"` for C linkage compatibility
+
+ @param buf The input string containing the date/time.
+ @param fmt The format string (e.g. `"%Y-%m-%d %H:%M:%S"`).
+ @param tm A pointer to a `struct tm` to be filled with parsed values.
+ @return A pointer to the next character in `buf` after the parsed portion, or `nullptr` if parsing fails.
+ */
 char * strptime(const char *buf, const char *fmt, struct tm *tm);
 
 #ifdef __cplusplus
