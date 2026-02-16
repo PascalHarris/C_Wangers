@@ -1,10 +1,6 @@
 #include "c_wangers_memory.h"
 
 void* s_memcpy(void* dest, const void* src, size_t n) {
-    assert(dest != NULL);
-    assert(src != NULL);
-    assert(n > 0);
-
     if (dest == src) {
         return dest; // no need to copy
     }

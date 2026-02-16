@@ -1,4 +1,5 @@
 #include "c_wangers_string.h"
+#include "c_wangers_memory.h"
 
 char* pad_left(size_t length, char pad, char* input_string) {
     size_t minLength = length > strlen(input_string)?length:strlen(input_string);
@@ -9,7 +10,7 @@ char* pad_left(size_t length, char pad, char* input_string) {
 
     memset(return_string, 0, sizeof(char));
     memset(return_string, pad, length);
-    memcpy(return_string+padLen, input_string, minLength - padLen);
+    s_memcpy(return_string+padLen, input_string, minLength - padLen);
 
     return return_string;
 }
@@ -23,7 +24,7 @@ char* pad_right(size_t length, char pad, char* input_string) {
 
     memset(return_string, 0, sizeof(char));
     memset(return_string, pad, length);
-    memcpy(return_string, input_string, minLength - padLen);
+    s_memcpy(return_string, input_string, minLength - padLen);
 
     return return_string;
 }
@@ -87,13 +88,13 @@ char* replace_occurences_in_string(char *input_string, const char *string_to_rep
             break;
         }
 
-        memcpy(insert_point, tmp, p - tmp);
+        s_memcpy(insert_point, tmp, p - tmp);
         insert_point += p - tmp;
 
         if (strlen(replacement_string) > strlen(string_to_replace)) { // need a bigger buffer
             output_string = (char *)realloc(output_string, sizeof(char) * (strlen(output_string) + (strlen(replacement_string) - strlen(string_to_replace))));
         }
-        memcpy(insert_point, replacement_string, replacement_string_len);
+        s_memcpy(insert_point, replacement_string, replacement_string_len);
         insert_point += replacement_string_len;
 
         tmp = p + string_to_replace_len;

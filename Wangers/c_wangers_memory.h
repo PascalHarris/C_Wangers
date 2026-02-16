@@ -1,11 +1,11 @@
 //
-//  c_wangers_buffer.h
+//  c_wangers_memory.h
 //
 //  Created by Pascal Harris on 03/06/2008.
 //  Copyright (c) 2008 Pascal Harris, 45RPM Software. All rights reserved.
 //
-#ifndef CBUFFER_H_
-#define CBUFFER_H_
+#ifndef CMEMORY_H_
+#define CMEMORY_H_
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

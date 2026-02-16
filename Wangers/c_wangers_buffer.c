@@ -1,4 +1,5 @@
 #include "c_wangers_buffer.h"
+#include "c_wangers_memory.h"
 #include "math.h"
 
 unsigned long ByteSwap64 (unsigned long LongNumber) {
@@ -124,7 +125,7 @@ char *base64_decode(char *s) {
     r = _ret = (char *) calloc(len, sizeof(char));
 
     while (p < e) {
-        memcpy(unit, p, 4);
+        s_memcpy(unit, p, 4);
         if (unit[3] == '=') {
             unit[3] = 0;
         }
